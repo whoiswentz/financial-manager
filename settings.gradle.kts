@@ -1,1 +1,1 @@
-rootProject.name = "stream.alchemists.financial-manager"
+rootProject.name = "financial-manager"
