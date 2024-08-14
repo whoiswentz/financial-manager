@@ -6,6 +6,7 @@ val exposed_version: String by project
 val flyway_version: String by project
 val koin_version: String by project
 val ktor_version: String by project
+val hikari_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.10"
@@ -36,7 +37,8 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("com.zaxxer:HikariCP:$hikari_version")
     implementation("io.ktor:ktor-server-host-common-jvm")
     implementation("io.ktor:ktor-server-status-pages-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
