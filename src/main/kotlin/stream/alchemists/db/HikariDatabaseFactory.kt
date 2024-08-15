@@ -1,8 +1,8 @@
 package stream.alchemists.db
 
-import AppConfiguration
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import stream.alchemists.AppConfiguration
 import javax.sql.DataSource
 
 class HikariDatabaseFactory : DatabaseFactory {
