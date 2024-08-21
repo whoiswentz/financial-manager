@@ -15,6 +15,7 @@ fun Application.configureKoin() {
     install(Koin) {
         slf4jLogger()
         modules(module {
+            // TODO("REMOVE HikariDatabaseFactory")
             single<DatabaseFactory> { HikariDatabaseFactory() }
             single<CategoryRepository> { CategoryRepositoryImpl() }
             single<CategoryService> { CategoryServiceImpl(get()) }

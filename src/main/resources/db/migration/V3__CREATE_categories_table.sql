@@ -1,5 +1,3 @@
-CREATE EXTENSION "uuid-ossp";
-
 create table categories
 (
     id          uuid primary key not null default uuid_generate_v1(),
