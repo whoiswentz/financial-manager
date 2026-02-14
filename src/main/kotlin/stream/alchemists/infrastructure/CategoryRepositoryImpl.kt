@@ -1,7 +1,9 @@
 package stream.alchemists.infrastructure
 
+import org.jetbrains.exposed.dao.id.EntityID
 import stream.alchemists.db.Categories
 import stream.alchemists.db.CategoryEntity
+import stream.alchemists.db.Users
 import stream.alchemists.db.dbQuery
 import stream.alchemists.domain.exceptions.NotFoundException
 import stream.alchemists.domain.models.Category
@@ -15,7 +17,7 @@ class CategoryRepositoryImpl : CategoryRepository {
         CategoryEntity.new {
             title = request.title
             description = request.description
-            this.userId = org.jetbrains.exposed.dao.id.EntityID(userId, stream.alchemists.db.Users)
+            this.userId = EntityID(userId, Users)
         }.let { CategoryEntity.toDomain(it) }
     }
 
