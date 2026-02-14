@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
+import stream.alchemists.domain.models.User
 import java.util.UUID
 
 object Users : UUIDTable("users") {
@@ -17,5 +18,11 @@ class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var email by Users.email
     var password by Users.password
 
-    companion object : EntityClass<UUID, UserEntity>(Users)
+    companion object : EntityClass<UUID, UserEntity>(Users) {
+        fun toDomain(entity: UserEntity): User = User(
+            id = entity.id.toString(),
+            name = entity.name,
+            email = entity.email,
+        )
+    }
 }
