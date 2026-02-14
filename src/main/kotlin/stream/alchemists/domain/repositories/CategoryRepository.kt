@@ -7,5 +7,8 @@ import java.util.*
 
 interface CategoryRepository {
     suspend fun create(request: CreateCategoryRequest): Category
+    suspend fun findAll(): List<Category>
+    suspend fun findById(id: UUID): Category?
     suspend fun update(id: UUID, request: UpdateCategoryRequest): Category
+    suspend fun delete(id: UUID)
 }

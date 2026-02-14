@@ -11,12 +11,18 @@ import java.util.*
 
 class CategoryRepositoryImpl : CategoryRepository {
     override suspend fun create(request: CreateCategoryRequest): Category = dbQuery {
-        val category = CategoryEntity.new {
+        CategoryEntity.new {
             title = request.title
             description = request.description
         }.let { CategoryEntity.toDomain(it) }
+    }
 
-        return@dbQuery category
+    override suspend fun findAll(): List<Category> = dbQuery {
+        CategoryEntity.all().map { CategoryEntity.toDomain(it) }
+    }
+
+    override suspend fun findById(id: UUID): Category? = dbQuery {
+        CategoryEntity.findById(id)?.let { CategoryEntity.toDomain(it) }
     }
 
     override suspend fun update(id: UUID, request: UpdateCategoryRequest): Category = dbQuery {
@@ -26,6 +32,12 @@ class CategoryRepositoryImpl : CategoryRepository {
         category.title = request.title
         category.description = request.description
 
-        return@dbQuery CategoryEntity.toDomain(category)
+        CategoryEntity.toDomain(category)
+    }
+
+    override suspend fun delete(id: UUID) = dbQuery {
+        val category = CategoryEntity.findById(id)
+            ?: throw NotFoundException("category with $id not found")
+        category.delete()
     }
 }
