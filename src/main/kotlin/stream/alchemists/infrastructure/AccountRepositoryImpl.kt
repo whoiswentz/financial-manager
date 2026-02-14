@@ -1,5 +1,7 @@
 package stream.alchemists.infrastructure
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
+import org.jetbrains.exposed.sql.update
 import stream.alchemists.db.AccountEntity
 import stream.alchemists.db.Accounts
 import stream.alchemists.db.dbQuery
@@ -46,8 +48,9 @@ class AccountRepositoryImpl : AccountRepository {
     }
 
     override suspend fun updateBalance(id: UUID, delta: Double) = dbQuery {
-        val account = AccountEntity.findById(id)
-            ?: throw NotFoundException("account with $id not found")
-        account.balance += delta
+        Accounts.update({ Accounts.id eq id }) {
+            it[balance] = balance + delta
+        }
+        Unit
     }
 }

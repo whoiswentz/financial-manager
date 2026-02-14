@@ -4,9 +4,9 @@ create table transactions
     amount      double precision     not null,
     description varchar(255),
     type        varchar(50)          not null,
-    category_id uuid references categories (id),
-    account_id  uuid                 not null references accounts (id),
-    user_id     uuid                 not null references users (id),
+    category_id uuid references categories (id) on delete set null,
+    account_id  uuid                 not null references accounts (id) on delete cascade,
+    user_id     uuid                 not null references users (id) on delete cascade,
     created_at  bigint               not null
 );
 

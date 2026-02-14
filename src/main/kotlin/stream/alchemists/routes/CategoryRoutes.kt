@@ -10,7 +10,7 @@ import org.koin.ktor.ext.inject
 import stream.alchemists.domain.models.CreateCategoryRequest
 import stream.alchemists.domain.models.UpdateCategoryRequest
 import stream.alchemists.domain.services.CategoryService
-import java.util.*
+import stream.alchemists.utils.getUUIDParameter
 
 fun Application.categoryRoutes() {
     val categoryService: CategoryService by inject()
@@ -23,7 +23,7 @@ fun Application.categoryRoutes() {
                     call.respond(HttpStatusCode.OK, categories)
                 }
                 get("/{id}") {
-                    val categoryId = UUID.fromString(call.parameters["id"])
+                    val categoryId = call.getUUIDParameter("id") ?: return@get
                     val category = categoryService.findById(categoryId)
                     call.respond(HttpStatusCode.OK, category)
                 }
@@ -33,13 +33,13 @@ fun Application.categoryRoutes() {
                     call.respond(HttpStatusCode.Created, category)
                 }
                 put("/{id}") {
-                    val categoryId = UUID.fromString(call.parameters["id"])
+                    val categoryId = call.getUUIDParameter("id") ?: return@put
                     val updateCategoryRequest = call.receive<UpdateCategoryRequest>()
                     val updatedCategory = categoryService.update(categoryId, updateCategoryRequest)
                     call.respond(HttpStatusCode.OK, updatedCategory)
                 }
                 delete("/{id}") {
-                    val categoryId = UUID.fromString(call.parameters["id"])
+                    val categoryId = call.getUUIDParameter("id") ?: return@delete
                     categoryService.delete(categoryId)
                     call.respond(HttpStatusCode.NoContent)
                 }
