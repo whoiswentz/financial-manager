@@ -4,7 +4,7 @@ create table accounts
     name     varchar(255)     not null,
     type     varchar(50)      not null,
     balance  double precision not null default 0.0,
-    user_id  uuid             not null references users (id)
+    user_id  uuid             not null references users (id) on delete cascade
 );
 
 create index idx_accounts_user_id on accounts (user_id);
