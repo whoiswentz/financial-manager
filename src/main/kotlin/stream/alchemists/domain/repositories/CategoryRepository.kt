@@ -6,9 +6,9 @@ import stream.alchemists.domain.models.UpdateCategoryRequest
 import java.util.*
 
 interface CategoryRepository {
-    suspend fun create(request: CreateCategoryRequest): Category
-    suspend fun findAll(): List<Category>
-    suspend fun findById(id: UUID): Category?
-    suspend fun update(id: UUID, request: UpdateCategoryRequest): Category
-    suspend fun delete(id: UUID)
+    suspend fun create(userId: UUID, request: CreateCategoryRequest): Category
+    suspend fun findAllByUser(userId: UUID): List<Category>
+    suspend fun findById(userId: UUID, id: UUID): Category?
+    suspend fun update(userId: UUID, id: UUID, request: UpdateCategoryRequest): Category
+    suspend fun delete(userId: UUID, id: UUID)
 }
