@@ -7,6 +7,8 @@ import stream.alchemists.domain.models.CreateCategoryRequest
 import stream.alchemists.domain.models.CreateTransactionRequest
 import stream.alchemists.domain.models.RegisterRequest
 
+private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+
 fun Application.configureRequestValidation() {
     install(RequestValidation) {
         validate<CreateCategoryRequest> { request ->
@@ -21,7 +23,7 @@ fun Application.configureRequestValidation() {
             if (request.name.isBlank()) reasons.add("Name can not be empty")
             if (request.email.isBlank()) {
                 reasons.add("Email can not be empty")
-            } else if (!request.email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"))) {
+            } else if (!request.email.matches(EMAIL_REGEX)) {
                 reasons.add("Email must be a valid email address")
             }
             if (request.password.length < 6) reasons.add("Password must be at least 6 characters")
