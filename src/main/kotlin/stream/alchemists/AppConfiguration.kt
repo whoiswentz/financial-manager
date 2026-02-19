@@ -16,4 +16,10 @@ object AppConfiguration {
     val algorithm = applicationConfig.property("encryptor.algorithm").getString()
     val iterations = applicationConfig.property("encryptor.iterations").getString().toInt()
     val keyLength = applicationConfig.property("encryptor.keyLength").getString().toInt()
+
+    val jwtSecret = applicationConfig.property("jwt.secret").getString()
+    val jwtIssuer = applicationConfig.property("jwt.issuer").getString()
+    val jwtAudience = applicationConfig.property("jwt.audience").getString()
+    val jwtRealm = applicationConfig.property("jwt.realm").getString()
+    val jwtExpiration = applicationConfig.property("jwt.expiration").getString().toLong()
 }
