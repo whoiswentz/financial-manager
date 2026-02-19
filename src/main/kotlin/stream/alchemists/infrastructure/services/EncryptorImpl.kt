@@ -22,12 +22,25 @@ class EncryptorImpl : Encryptor {
     }
 
     override fun verify(value: String, encrypted: String): Boolean {
-        val parts = encrypted.split(":")
-        if (parts.size != 2) return false
-        val salt = Base64.getDecoder().decode(parts[0])
-        val expectedHash = parts[1]
-        val actualHash = hex(hash(value, salt))
-        return expectedHash == actualHash
+        return try {
+            val parts = encrypted.split(":")
+            if (parts.size != 2) return false
+            val salt = Base64.getDecoder().decode(parts[0])
+            val expectedHash = parts[1]
+            val actualHash = hex(hash(value, salt))
+            constantTimeEquals(expectedHash, actualHash)
+        } catch (e: IllegalArgumentException) {
+            false
+        }
+    }
+
+    private fun constantTimeEquals(a: String, b: String): Boolean {
+        if (a.length != b.length) return false
+        var result = 0
+        for (i in a.indices) {
+            result = result or (a[i].code xor b[i].code)
+        }
+        return result == 0
     }
 
     private fun hash(value: String, salt: ByteArray): ByteArray {

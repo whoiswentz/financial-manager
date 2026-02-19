@@ -10,18 +10,21 @@ import java.util.*
 object Categories : UUIDTable("categories") {
     val title = varchar("title", 80)
     val description = varchar("description", 255).nullable()
+    val userId = reference("user_id", Users)
 }
 
 class CategoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var title by Categories.title
     var description by Categories.description
+    var userId by Categories.userId
 
     companion object : EntityClass<UUID, CategoryEntity>(Categories) {
         fun toDomain(entity: CategoryEntity): Category = with(entity) {
             Category(
                 id = entity.id.toString(),
                 title = entity.title,
-                description = entity.description
+                description = entity.description,
+                userId = entity.userId.toString(),
             )
         }
     }

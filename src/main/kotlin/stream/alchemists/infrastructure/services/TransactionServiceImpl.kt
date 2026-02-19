@@ -56,13 +56,12 @@ class TransactionServiceImpl(
 
     override suspend fun delete(userId: UUID, id: UUID) {
         val transaction = findById(userId, id)
-        val deleted = transactionRepository.delete(id)
-            ?: throw NotFoundException("transaction with $id not found")
+        transactionRepository.delete(id)
 
-        val delta = when (TransactionType.valueOf(deleted.type.name)) {
-            TransactionType.INCOME -> -deleted.amount
-            TransactionType.EXPENSE -> deleted.amount
+        val delta = when (TransactionType.valueOf(transaction.type.name)) {
+            TransactionType.INCOME -> -transaction.amount
+            TransactionType.EXPENSE -> transaction.amount
         }
-        accountRepository.updateBalance(UUID.fromString(deleted.accountId), delta)
+        accountRepository.updateBalance(UUID.fromString(transaction.accountId), delta)
     }
 }

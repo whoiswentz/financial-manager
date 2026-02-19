@@ -7,6 +7,8 @@ import stream.alchemists.domain.models.CreateCategoryRequest
 import stream.alchemists.domain.models.CreateTransactionRequest
 import stream.alchemists.domain.models.RegisterRequest
 
+private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+
 fun Application.configureRequestValidation() {
     install(RequestValidation) {
         validate<CreateCategoryRequest> { request ->
@@ -19,7 +21,11 @@ fun Application.configureRequestValidation() {
         validate<RegisterRequest> { request ->
             val reasons = mutableListOf<String>()
             if (request.name.isBlank()) reasons.add("Name can not be empty")
-            if (request.email.isBlank()) reasons.add("Email can not be empty")
+            if (request.email.isBlank()) {
+                reasons.add("Email can not be empty")
+            } else if (!request.email.matches(EMAIL_REGEX)) {
+                reasons.add("Email must be a valid email address")
+            }
             if (request.password.length < 6) reasons.add("Password must be at least 6 characters")
             if (reasons.isEmpty()) ValidationResult.Valid else ValidationResult.Invalid(reasons)
         }
@@ -33,7 +39,15 @@ fun Application.configureRequestValidation() {
         validate<CreateTransactionRequest> { request ->
             val reasons = mutableListOf<String>()
             if (request.amount <= 0) reasons.add("Amount must be greater than 0")
-            if (request.accountId.isBlank()) reasons.add("Account ID is required")
+            if (request.accountId.isBlank()) {
+                reasons.add("Account ID is required")
+            } else {
+                try {
+                    java.util.UUID.fromString(request.accountId)
+                } catch (e: IllegalArgumentException) {
+                    reasons.add("Account ID must be a valid UUID")
+                }
+            }
             if (reasons.isEmpty()) ValidationResult.Valid else ValidationResult.Invalid(reasons)
         }
     }
